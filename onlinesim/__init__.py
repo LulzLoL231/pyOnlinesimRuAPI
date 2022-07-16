@@ -7,5 +7,5 @@ from .driver import OnlinesimRu
 
 
 __author__ = 'LulzLoL231'
-__version__ = '0.2'
+__version__ = '0.3'
 __contact__ = 'https://github.com/LulzLoL231'

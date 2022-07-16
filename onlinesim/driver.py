@@ -3,14 +3,11 @@
 #  onlinesim.ru API client: Driver
 #  Created by LulzLoL231 at 16/07/22
 #
-from .api import APIConnector
 from .sms import SMSAPI
 from .user import UserAPI
 
 
-class OnlinesimRu(APIConnector):
-    def sms(self):
-        return SMSAPI(self.api_key, self.lang)
-
-    def user(self):
-        return UserAPI(self.api_key, self.lang)
+class OnlinesimRu:
+    def __init__(self, api_key: str, lang: str = 'ru') -> None:
+        self.sms = SMSAPI(api_key, lang)
+        self.user = UserAPI(api_key, lang)
