@@ -14,33 +14,33 @@ from .api import APIConnector
 
 
 class NumbersStatsService(BaseModel):
-    count: int
-    popular: bool
-    price: Decimal
-    id: int
-    service: str
-    slug: str
+    count: int | None
+    popular: bool | None
+    price: Decimal | None
+    id: int | None
+    service: str | None
+    slug: str | None
 
 
 class NumbersStats(BaseModel):
-    name: str
-    position: int
+    name: str | None
+    position: int | None
     code: int
-    new: bool
-    enabled: bool
-    services: Dict[str, NumbersStatsService]
+    new: bool | None
+    enabled: bool | None
+    services: Dict[str, NumbersStatsService] | None
 
 
 class State(BaseModel):
-    tzid: int
-    service: str
-    number: str
-    msg: str
-    time: str
-    form: str
-    forward_status: int
-    forward_number: str
-    country: int
+    tzid: int | None
+    service: str | None
+    number: str | None
+    msg: str | None
+    time: str | None
+    form: str | None
+    forward_status: int | None
+    forward_number: str | None
+    country: int | None
 
 
 class SMSAPI(APIConnector):
