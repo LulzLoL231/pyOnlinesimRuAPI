@@ -19,10 +19,10 @@ python3 setup.py install
 
 ### Пример получения баланса
 ```python
-from onlinesim import UserAPI
+from onlinesim import OnlinesimRu
 
 
-user = UserAPI('%API_KEY%')
+user = OnlinesimRu('%API_KEY%').user()
 bal = await user.get_balance()  # onlinesim.user.Balance
 
 print(f'Ваш доступный баланс: {bal.balance} RUB')

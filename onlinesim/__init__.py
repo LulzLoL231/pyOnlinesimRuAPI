@@ -3,10 +3,9 @@
 #  onlinesim.ru API client
 #  Created by LulzLoL231 at 02/07/22
 #
-from .sms import SMSAPI
-from .user import UserAPI
+from .driver import OnlinesimRu
 
 
 __author__ = 'LulzLoL231'
-__version__ = '0.1'
+__version__ = '0.2'
 __contact__ = 'https://github.com/LulzLoL231'
