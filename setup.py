@@ -41,7 +41,7 @@ setup(
     keywords=['onlinesim', 'onlinesim.ru', 'sim-rent', 'phone-rent'],
     url='https://github.com/LulzLoL231/pyOnlinesimRuAPI',
     download_url='https://github.com/LulzLoL231/pyOnlinesimRuAPI/archive/master.zip',
-    packages=['onlinesim'],
+    packages=['onlinesim', 'onlinesim.sync', 'onlinesim.async_'],
     install_requires=requirements(),
     setup_requires=['wheel'],
     classifiers=[
