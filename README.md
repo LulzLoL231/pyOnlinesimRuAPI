@@ -35,7 +35,7 @@ async def get_active_operations():
     opers = await sms.get_state()
     return opers 
 
-opers_len = len((await get_active_operations()))
+opers_len = len((run(get_active_operations())))
 
 print(f'Ваш доступный баланс: {bal.balance} RUB')
 print(f'На текущий момент выполняется {opers_len} операций.')
