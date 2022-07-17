@@ -4,20 +4,13 @@
 #  Created by LulzLoL231 at 7/7/22
 #
 import logging
-from decimal import Decimal
 
-from pydantic import BaseModel
-
-from .errors import APIError
-from .api import APIConnector
+from ..errors import APIError
+from ..schemas import Balance
+from .api import AsyncAPIConnector
 
 
-class Balance(BaseModel):
-    balance: Decimal
-    zbalance: Decimal
-
-
-class UserAPI(APIConnector):
+class UserAPI(AsyncAPIConnector):
     log = logging.getLogger('onlinesim_api')
 
     async def get_balance(self) -> Balance:
