@@ -4,59 +4,27 @@
 #  Created by LulzLoL231 at 7/7/22
 #
 import logging
-from decimal import Decimal
-from typing import Dict, Literal
+from typing import Literal
 
-from pydantic import BaseModel
-
-from .errors import APIError
 from .api import APIConnector
-
-
-class NumbersStatsService(BaseModel):
-    count: int
-    popular: bool
-    price: Decimal
-    id: int
-    service: str
-    slug: str
-
-
-class NumbersStats(BaseModel):
-    name: str
-    position: int
-    code: int
-    new: bool
-    enabled: bool
-    services: Dict[str, NumbersStatsService]
-
-
-class State(BaseModel):
-    tzid: int
-    service: str
-    number: str
-    msg: str | None
-    time: str
-    form: str
-    forward_status: int | None
-    forward_number: str | None
-    country: int
+from ..errors import APIError
+from ..schemas import NumbersStats, State
 
 
 class SMSAPI(APIConnector):
     log = logging.getLogger('onlinesim_api')
 
-    async def get_numbers_stats(self) -> NumbersStats:
+    def get_numbers_stats(self) -> NumbersStats:
         '''Получение актуальной статистики по странам и количеству номеров
 
         Returns:
             NumbersStats: Статистика.
         '''
         self.log.debug('Called!')
-        resp = await self._get('getNumbersStats')
+        resp = self._get('getNumbersStats')
         return NumbersStats(**resp)
 
-    async def get_num(self, service: str) -> int:
+    def get_num(self, service: str) -> int:
         '''Делает запрос виртуального номера, создает операцию (сохраняет список параметров запроса).
 
         Args:
@@ -66,13 +34,13 @@ class SMSAPI(APIConnector):
             int: tzid.
         '''
         self.log.debug(f'Called with args: ({service})')
-        resp = await self._get('getNum', service=service)
+        resp = self._get('getNum', service=service)
         if resp.get('response', '-1') == 1:
             return resp.get('tzid', -1)
         else:
             raise APIError(resp.get('response', 'UnexpectedError'))
 
-    async def get_state(
+    def get_state(
         self, tzid: int | None = None, message_to_code: int | None = None,
         msg_list: int | None = None, clean: int | None = None
     ) -> list[State]:
@@ -88,13 +56,13 @@ class SMSAPI(APIConnector):
             list[State]: Массив состояний операции.
         '''
         self.log.debug(f'Called with args: ({tzid}, {message_to_code}, {msg_list}, {clean})')
-        resp = await self._get(
+        resp = self._get(
             'getState', tzid=tzid, message_to_code=message_to_code,
             msg_list=msg_list, clean=clean
         )
         return [State(**r) for r in resp]
 
-    async def set_operation_revise(self, tzid: int) -> int:
+    def set_operation_revise(self, tzid: int) -> int:
         '''Создает запрос на уточнение ответа по операции. Следует использовать, если поступил неверный код.
         Данный метод отправляет запрос на другой код в случае, если поступило несколько СМС на один номер с разными кодами.
 
@@ -105,13 +73,13 @@ class SMSAPI(APIConnector):
             int: Идентификатор операции (tzid).
         '''
         self.log.debug(f'Called with args: ({tzid})')
-        resp = await self._get('setOperationRevise', tzid=tzid)
+        resp = self._get('setOperationRevise', tzid=tzid)
         if resp.get('response', '-1') == 1:
             return resp.get('tzid', -1)
         else:
             raise APIError(resp.get('response', 'UnexpectedError'))
 
-    async def set_operation_ok(self, tzid: int) -> Literal[True]:
+    def set_operation_ok(self, tzid: int) -> Literal[True]:
         '''Отправляет уведомление об успешном получении кода и завершает операцию.
 
         Args:
@@ -121,7 +89,7 @@ class SMSAPI(APIConnector):
             Literal[True]: Операция закрыта.
         '''
         self.log.debug(f'Called with args: ({tzid})')
-        resp = await self._get('setOperationOk', tzid=tzid)
+        resp = self._get('setOperationOk', tzid=tzid)
         if resp.get('response', '-1') == 1:
             return True
         else:

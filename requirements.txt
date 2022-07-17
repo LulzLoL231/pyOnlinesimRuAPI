@@ -1,2 +1,4 @@
 aiohttp
 pydantic
+brotli
+httpx[http2]
