@@ -45,7 +45,7 @@ class AsyncAPIConnector:
         async with AsyncClient(headers=self.HEADERS) as cli:
             req = await cli.get(url)
             if req.is_success:
-                resp = await req.json()
+                resp = req.json()
                 self.log.debug(f'API response: {resp}')
                 return resp
             else:
