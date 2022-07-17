@@ -1,3 +1,2 @@
 pydantic
-brotli
-httpx[http2]
+httpx
