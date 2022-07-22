@@ -13,7 +13,7 @@ from ..schemas import Balance
 class UserAPI(APIConnector):
     log = logging.getLogger('onlinesim_api')
 
-    async def get_balance(self) -> Balance:
+    def get_balance(self) -> Balance:
         '''Returns user balance.
 
         Returns:

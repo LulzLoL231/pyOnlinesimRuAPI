@@ -6,7 +6,7 @@
 from typing import Dict
 from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Balance(BaseModel):
@@ -30,6 +30,15 @@ class NumbersStats(BaseModel):
     new: bool
     enabled: bool
     services: Dict[str, NumbersStatsService]
+
+
+class GetNumberResponse(BaseModel):
+    tzid: int
+    number: str | None
+
+    @validator('number')
+    def get_number_wo_plus(cls, number: str) -> str:
+        return number.replace('+', '')
 
 
 class State(BaseModel):

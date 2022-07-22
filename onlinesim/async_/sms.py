@@ -3,38 +3,59 @@
 #  Onlinesim API: SMS API.
 #  Created by LulzLoL231 at 7/7/22
 #
+import json
 import logging
 from typing import Literal
 
 from ..errors import APIError
 from .api import AsyncAPIConnector
-from ..schemas import NumbersStats, State
+from ..schemas import NumbersStats, State, GetNumberResponse
 
 
 class SMSAPI(AsyncAPIConnector):
     log = logging.getLogger('onlinesim_api')
 
-    async def get_numbers_stats(self) -> NumbersStats:
+    async def get_numbers_stats(self, country: str = '7') -> NumbersStats:
         '''Получение актуальной статистики по странам и количеству номеров
+
+        Args:
+            country (str | None): Страна статистики (См. https://onlinesim.ru/docs/api/ru/sms/getNumbersStats). Стандартно - "7".
 
         Returns:
             NumbersStats: Статистика.
         '''
-        self.log.debug('Called!')
-        resp = await self._get('getNumbersStats')
+        self.log.debug(f'Called with args: ({country})!')
+        resp = await self._get('getNumbersStats', country=country)
         return NumbersStats(**resp)
 
-    async def get_num(self, service: str) -> int:
+    async def get_num(
+        self, service: str, number: bool = True,
+        region: str | None = None, country: str | None = None,
+        reject: list[str] | None = None, extension: int = 0,
+        dev_id: int | None = None
+    ) -> GetNumberResponse:
         '''Делает запрос виртуального номера, создает операцию (сохраняет список параметров запроса).
 
         Args:
-            service (str): определяет сайт (сервис) от которого будет ожидаться и отображаться СМС
+            service (str): Определяет сайт (сервис) от которого будет ожидаться и отображаться СМС
+            number (bool, optional): Возвращать номер телефона в ответе? Стандартно - "True".
+            region (str | None, optional): Задаёт регион номера. 78 - СПБ, 77 - Москва, None - Любой.
+            country (str | None, optional): Задаёт страну номера. См. `get_numbers_stats`. None - 7.
+            reject (list[str] | None, optional): Массив масок исключений. (См. https://onlinesim.ru/docs/api/ru/sms/getNum)
+            extension (int, optional): Автопродление номера. 0 - без пробления. 2 - Продление на месяц.
+            dev_id (int, optional): ID аккаунта для разработчиков ПО.
 
         Returns:
-            int: tzid.
+            GetNumberResponse: Request response..
         '''
-        self.log.debug(f'Called with args: ({service})')
-        resp = await self._get('getNum', service=service)
+        self.log.debug(
+            f'Called with args: ({service}, {number}, {region}, {country}, {reject}, {extension}, {dev_id})'
+        )
+        resp = await self._get(
+            'getNum', service=service, number=number, region=region,
+            country=country, reject=json.dumps(reject), extension=extension,
+            dev_id=dev_id
+        )
         if resp.get('response', '-1') == 1:
             return resp.get('tzid', -1)
         else:
