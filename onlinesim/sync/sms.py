@@ -51,11 +51,18 @@ class SMSAPI(APIConnector):
         self.log.debug(
             f'Called with args: ({service}, {number}, {region}, {country}, {reject}, {extension}, {dev_id})'
         )
-        resp = self._get(
-            'getNum', service=service, number=number, region=region,
-            country=country, reject=json.dumps(reject), extension=extension,
-            dev_id=dev_id
-        )
+        if reject:
+            resp = self._get(
+                'getNum', service=service, number=str(number).lower(),
+                region=region, country=country, reject=json.dumps(reject),
+                extension=extension, dev_id=dev_id
+            )
+        else:
+            resp = self._get(
+                'getNum', service=service, number=str(number).lower(),
+                region=region, country=country, reject=None,
+                extension=extension, dev_id=dev_id
+            )
         if resp.get('response', '-1') == 1:
             return resp.get('tzid', -1)
         else:
