@@ -64,7 +64,7 @@ class SMSAPI(APIConnector):
                 extension=extension, dev_id=dev_id
             )
         if resp.get('response', '-1') == 1:
-            return resp.get('tzid', -1)
+            return GetNumberResponse(**resp)
         else:
             raise APIError(resp.get('response', 'UnexpectedError'))
 

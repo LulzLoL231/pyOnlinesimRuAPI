@@ -8,5 +8,5 @@ from .async_.driver import AsyncOnlinesimRu  # noqa
 
 
 __author__ = 'LulzLoL231'
-__version__ = '1.2.2'
+__version__ = '1.2.3'
 __contact__ = 'https://github.com/LulzLoL231'
